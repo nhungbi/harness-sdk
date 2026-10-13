@@ -147,23 +147,25 @@ Does the agent recover when `get_move` times out? When `get_pokemon` returns a n
 Red teaming tests whether your agent resists adversarial pressure: jailbreaks, data exfiltration attempts, excessive agency. The generator inspects your agent's tools and system prompt and produces targeted attacks; the strategy controls how those attacks escalate across turns.
 
 ```python
-from strands_evals.experimental.redteam import RedTeamExperiment
-from strands_evals.experimental.redteam.generators.adversarial import AdversarialCaseGenerator
-from strands_evals.experimental.redteam.strategies import CrescendoStrategy
+from strands_evals.redteaming import (
+    AdversarialCaseGenerator,
+    CrescendoStrategy,
+    RedTeamExperiment,
+)
 
 cases = AdversarialCaseGenerator().generate_cases(
-    agent=agent,
-    risk_categories=["data_exfiltration", "excessive_agency"],
+    agent=create_agent(),
+    risk_categories=["sensitive_data", "excessive_agency"],
     num_cases=3,
 )
 
 experiment = RedTeamExperiment(
     cases=cases,
-    agent_factory=create_agent,  # fresh agent per case so attacks don't bleed across runs
     attack_strategies=[CrescendoStrategy()],
 )
 
-report = experiment.run_evaluations()
+# fresh agent per case so attacks don't bleed across runs
+report = experiment.run_evaluations(agent_factory=create_agent)
 ```
 
 Red teaming validates that your guardrails hold under adversarial conditions, not just happy-path inputs.
