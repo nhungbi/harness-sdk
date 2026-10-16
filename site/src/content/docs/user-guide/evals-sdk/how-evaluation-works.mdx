@@ -84,8 +84,8 @@ multi-turn behavior without a human in the loop.
 [detector](detectors/index.md) reads that run's `Session`, finds the span where
 things went wrong, and proposes a root cause. Detectors run only when you pass a
 `DiagnosisConfig` to the experiment. By default they diagnose failing cases; set
-`trigger="always"` to diagnose every case. Scoring tells you *whether* a run failed;
-diagnosis tells you *why*.
+`trigger=DiagnosisTrigger.ALWAYS` to diagnose every case. Scoring tells you *whether*
+a run failed; diagnosis tells you *why*.
 
 ## How it fits together
 
